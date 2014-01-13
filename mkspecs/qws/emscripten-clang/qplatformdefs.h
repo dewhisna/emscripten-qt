@@ -67,7 +67,6 @@
 //#define QT_NO_SOUND
 //#define QT_NO_LIBRARY
 
-//#define DIR void *
 #include <unistd.h>
 
 #include <pthread.h>
