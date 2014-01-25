@@ -275,6 +275,54 @@ function EMSCRIPTENQT_keyEvent(e, isKeyDown, isKeyPress)
                 qtKeyCode = 0x01000015;
                 jsKeyCodeIsValidUnicode = false;
                 break;
+            case 112: // F1
+                qtKeyCode = 0x01000030;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 113: // F2
+                qtKeyCode = 0x01000031;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 114: // F3
+                qtKeyCode = 0x01000032;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 115: // F4
+                qtKeyCode = 0x01000033;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 116: // F5
+                qtKeyCode = 0x01000034;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 117: // F6
+                qtKeyCode = 0x01000035;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 118: // F7
+                qtKeyCode = 0x01000036;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 119: // F8
+                qtKeyCode = 0x01000037;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 120: // F9
+                qtKeyCode = 0x01000038;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 121: // F10
+                qtKeyCode = 0x01000039;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 122: // F11
+                qtKeyCode = 0x0100003a;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 123: // F12
+                qtKeyCode = 0x0100003b;
+                jsKeyCodeIsValidUnicode = false;
+                break;
             case 8: // Backspace
                 qtKeyCode = 0x01000003;
                 break;
