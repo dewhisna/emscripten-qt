@@ -226,6 +226,10 @@ function EMSCRIPTENQT_keyEvent(e, isKeyDown, isKeyPress)
     {
         e.preventDefault();
     }
+    if (e.altKey )
+    {
+        e.preventDefault();
+    }
 	var jsKeyCode = e.keyCode;
 	var qtKeyCode = 0;
 	var qtModifiers = 0;
@@ -239,6 +243,22 @@ function EMSCRIPTENQT_keyEvent(e, isKeyDown, isKeyPress)
         // does not change when coupled with a shift.
         switch(jsKeyCode)
         {
+            case 33: // PgUp
+                qtKeyCode = 0x01000016;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 34: // PgDn
+                qtKeyCode = 0x01000017;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 35: // End
+                qtKeyCode = 0x01000011;
+                jsKeyCodeIsValidUnicode = false;
+                break;
+            case 36: // Home
+                qtKeyCode = 0x01000010;
+                jsKeyCodeIsValidUnicode = false;
+                break;
             case 37: // Left
                 qtKeyCode = 0x01000012;
                 jsKeyCodeIsValidUnicode = false;
@@ -272,6 +292,9 @@ function EMSCRIPTENQT_keyEvent(e, isKeyDown, isKeyPress)
                 break;
             case 17: // Ctrl
                 qtKeyCode = 0x01000021;
+                break;
+            case 18: // Alt
+                qtKeyCode = 0x01000023;
                 break;
             default:
                 recognised = false;
@@ -335,7 +358,16 @@ function EMSCRIPTENQT_keyEvent(e, isKeyDown, isKeyPress)
 	{
 		qtModifiers += 0x04000000;
 	}
+	// The same as shift, but for alt:
+	if (e.altKey && !(qtKeyCode == 0x01000023 && !isKeyDown))
+	{
+                qtModifiers += 0x08000000;
+	}
     if (e.ctrlKey && (jsKeyCode >= "A".charCodeAt(0) && jsKeyCode <= "Z".charCodeAt(0)))
+    {
+        jsKeyCode = "a".charCodeAt(0) + (jsKeyCode - "A".charCodeAt(0));
+    }
+    if (e.altKey && (jsKeyCode >= "A".charCodeAt(0) && jsKeyCode <= "Z".charCodeAt(0)))
     {
         jsKeyCode = "a".charCodeAt(0) + (jsKeyCode - "A".charCodeAt(0));
     }
