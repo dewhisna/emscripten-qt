@@ -182,21 +182,21 @@ function EMSCRIPTENQT_mouseButtonEvent(e, isButtonDown)
         return;
     }
         var canvas = document.getElementById('canvas');
-        var qtMouseButton = -1; // See  Qt::MouseButton
+        var qtMouseButton = -1; // See  Qt::MouseButton (and EMSCRIPTENQT_mouseCanvasButtonChanged)
         switch (e.which) {
                 case 1:
-                        qtMouseButton = 1;
+                        qtMouseButton = 1;    // Left
                         break;
                 case 2:
-                        qtMouseButton = 4;
+                        qtMouseButton = 4;    // Middle
                         break;
                 case 3:
-                        qtMouseButton = 2;
+                        qtMouseButton = 2;    // Right
                         break;
         }
         try
         {
-                cwrap('EMSCRIPTENQT_mouseCanvasButtonChanged', 'number', ['number', 'number'])(qtMouseButton, (isButtonDown ? 1 : 0));
+                cwrap('EMSCRIPTENQT_mouseCanvasButtonChanged', 'number', ['number', 'number', 'number'])(qtMouseButton, (isButtonDown ? 1 : 0), 0);
         }
         catch (e)
         {
@@ -210,6 +210,31 @@ function EMSCRIPTENQT_mouseDown(e)
 function EMSCRIPTENQT_mouseUp(e)
 {
         EMSCRIPTENQT_mouseButtonEvent(e, false);
+}
+function EMSCRIPTENQT_mouseWheel(e)
+{
+    if (!EMSCRIPTENQT_mainLoopHasBeenInitialised)
+    {
+        return;
+    }
+        // Note: Browsers, events, and data will be as follows:
+        //  IE9, Chrome, Safari, Opera : mousewheel     : 120, 240, -120, -240
+        //  Firefox and Opera (some)   : DOMMouseScroll : -1,  -2,  1,    2
+        //
+        // We will normalize them and convert them to the consistent 120/240/-120/-240 values:
+        var evt=window.event || e;      //equalize event object
+        var delta=(evt.detail ? evt.detail*(-120) : evt.wheelDelta);    //check for detail first so Opera uses that instead of wheelDelta
+
+        e.preventDefault();
+
+        try
+        {
+                cwrap('EMSCRIPTENQT_mouseCanvasButtonChanged', 'number', ['number', 'number', 'number'])(0, 0, delta);
+        }
+        catch (e)
+        {
+                Module.print("Exception during mouseWheel event: " + e);
+        }
 }
 var lastKeyPressCharCode = null;
 var lastKeyDownCharCode = null;
@@ -620,6 +645,10 @@ Module['preRun'].push(function() {
                     document.addEventListener("keydown", EMSCRIPTENQT_keyDown, true);
                     document.addEventListener("keyup", EMSCRIPTENQT_keyUp, true);
                     document.addEventListener("keypress", EMSCRIPTENQT_keyPress, true);
+                    // IE9, Chrome, Safari, Opera:
+                    document.addEventListener("mousewheel", EMSCRIPTENQT_mouseWheel, false);
+                    // Firefox:
+                    document.addEventListener("DOMMouseScroll", EMSCRIPTENQT_mouseWheel, false);
                 }
                 canvas.onblur = function()
                 {
@@ -631,6 +660,10 @@ Module['preRun'].push(function() {
                     document.removeEventListener("keydown", EMSCRIPTENQT_keyDown, true);
                     document.removeEventListener("keyup", EMSCRIPTENQT_keyUp, true);
                     document.removeEventListener("keypress", EMSCRIPTENQT_keyPress, true);
+                    // IE9, Chrome, Safari, Opera
+                    document.removeEventListener("mousewheel", EMSCRIPTENQT_mouseWheel, false);
+                    // Firefox
+                    document.removeEventListener("DOMMouseScroll", EMSCRIPTENQT_mouseWheel, false);
                 }
 		// Add the 'use experimental renderer' checkbox beneath the canvas.
                 var experimentalRendererCheckbox = document.createElement("input");
