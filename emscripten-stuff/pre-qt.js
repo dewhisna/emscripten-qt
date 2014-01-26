@@ -143,7 +143,7 @@ function _EMSCRIPTENQT_flush_pixels_internal(data, regionX, regionY, regionW, re
                 _EMSCRIPTENQT_flush_pixels_normal(data, regionX, regionY, regionW, regionH);
         }
 }
-function _EMSCRIPTENQT_attemptedLocalEventLoop()
+function _EMSCRIPTENQT_attemptedLocalEventLoop_internal()
 {
 }
 function _EMSCRIPTENQT_launchWebBrowser_internal(urlCString)

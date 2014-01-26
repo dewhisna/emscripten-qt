@@ -266,3 +266,8 @@ mergeInto(LibraryManager.library, {
       }
     });
 
+mergeInto(LibraryManager.library, {
+     EMSCRIPTENQT_attemptedLocalEventLoop: function() {
+         return _EMSCRIPTENQT_attemptedLocalEventLoop_internal();
+      }
+    });
