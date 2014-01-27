@@ -355,6 +355,9 @@ function EMSCRIPTENQT_keyEvent(e, isKeyDown, isKeyPress)
             case 8: // Backspace
                 qtKeyCode = 0x01000003;
                 break;
+            case 9: // Tab
+                qtKeyCode = 0x01000001;
+                break;
             case 13: // Enter
                 qtKeyCode = 0x01000004;
                 break;
