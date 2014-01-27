@@ -224,6 +224,10 @@ function EMSCRIPTENQT_mouseWheel(e)
         // We will normalize them and convert them to the consistent 120/240/-120/-240 values:
         var evt=window.event || e;      //equalize event object
         var delta=(evt.detail ? evt.detail*(-120) : evt.wheelDelta);    //check for detail first so Opera uses that instead of wheelDelta
+        if (document.getElementById("invert-mousewheel-checkbox").checked)
+        {
+            delta = delta * (-1);
+        }
 
         e.preventDefault();
 
@@ -679,6 +683,19 @@ Module['preRun'].push(function() {
                 var experimentalRendererLabel = document.createElement('label');
                 experimentalRendererLabel.innerHTML = "Use experimental renderer";
                 paragraphForExperimentalCheckboxRenderer.appendChild(experimentalRendererLabel);
+
+                // Add 'invert mousewheel' checkbox beneath the canvas
+                var invertMousewheelCheckbox = document.createElement("input");
+                invertMousewheelCheckbox.id = "invert-mousewheel-checkbox";
+                invertMousewheelCheckbox.type = "checkbox";
+                invertMousewheelCheckbox.checked = (/Safari/i.test(navigator.userAgent)) ? true : false;
+                var paragraphForInvertMousewheelCheckbox = document.createElement("p");
+                paragraphForInvertMousewheelCheckbox.appendChild(invertMousewheelCheckbox);
+                paragraphForInvertMousewheelCheckbox.style.textAlign = "center";
+                canvas.parentNode.insertBefore(paragraphForInvertMousewheelCheckbox, canvas.nextSibling);
+                var invertMousewheelLabel = document.createElement("label");
+                invertMousewheelLabel.innerHTML = "Invert Mouse-Wheel (Mac Format)";
+                paragraphForInvertMousewheelCheckbox.appendChild(invertMousewheelLabel);
 
 
 		canvas.tabIndex = 1;
