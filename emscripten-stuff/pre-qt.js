@@ -54,6 +54,10 @@ function _EMSCRIPTENQT_canvas_height_pixels_internal()
 var lastRenderedData = null;
 function _EMSCRIPTENQT_flush_pixels_typed_array(data, regionX, regionY, regionW, regionH)
 {
+        if ((regionW <= 0) || (regionH <= 0))
+        {
+            return;
+        }
 	// Experimental canvas rendered that makes use of typed arrays.
         var canvasWidth = _EMSCRIPTENQT_canvas_width_pixels();
         var canvasHeight = _EMSCRIPTENQT_canvas_height_pixels();
@@ -105,6 +109,10 @@ function _EMSCRIPTENQT_flush_pixels_typed_array(data, regionX, regionY, regionW,
 }
 function _EMSCRIPTENQT_flush_pixels_normal(data, regionX, regionY, regionW, regionH)
 {
+        if ((regionW <= 0) || (regionH <= 0))
+        {
+            return;
+        }
         var canvasWidth = _EMSCRIPTENQT_canvas_width_pixels();
         var canvasHeight = _EMSCRIPTENQT_canvas_height_pixels();
         var canvas = document.getElementById('canvas');
