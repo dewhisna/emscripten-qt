@@ -691,7 +691,7 @@ Module['preRun'].push(function() {
                 var invertMousewheelCheckbox = document.createElement("input");
                 invertMousewheelCheckbox.id = "invert-mousewheel-checkbox";
                 invertMousewheelCheckbox.type = "checkbox";
-                invertMousewheelCheckbox.checked = (/Safari/i.test(navigator.userAgent)) ? true : false;
+                invertMousewheelCheckbox.checked = (/Macintosh/i.test(navigator.userAgent)) ? true : false;
                 var paragraphForInvertMousewheelCheckbox = document.createElement("p");
                 paragraphForInvertMousewheelCheckbox.appendChild(invertMousewheelCheckbox);
                 paragraphForInvertMousewheelCheckbox.style.textAlign = "center";
