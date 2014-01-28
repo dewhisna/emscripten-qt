@@ -705,7 +705,7 @@ Module['preRun'].push(function() {
                 paragraphForInvertMousewheelCheckbox.style.textAlign = "center";
                 canvas.parentNode.insertBefore(paragraphForInvertMousewheelCheckbox, canvas.nextSibling);
                 var invertMousewheelLabel = document.createElement("label");
-                invertMousewheelLabel.innerHTML = "Invert Mouse-Wheel (Mac Format)";
+                invertMousewheelLabel.innerHTML = "Invert Mouse Scroll Wheel (Mac \"Natural\" Format)";
                 paragraphForInvertMousewheelCheckbox.appendChild(invertMousewheelLabel);
 
 
