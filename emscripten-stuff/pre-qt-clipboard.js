@@ -12,6 +12,8 @@ catch (e)
         throw e;
 }
 
+var clipboardText = "";
+
 var EMSCRIPTENQT_callbackTimer = null;
 var EMSCRIPTENQT_mainLoopHasBeenInitialised = false;
 function _EMSCRIPTENQT_mainLoopInitialised_internal()
@@ -708,6 +710,57 @@ Module['preRun'].push(function() {
                 invertMousewheelLabel.innerHTML = "Invert Mouse Scroll Wheel (Mac \"Natural\" Format)";
                 paragraphForInvertMousewheelCheckbox.appendChild(invertMousewheelLabel);
 
+                // Add Copy From TextArea beneath the canvas:
+                var pasteSourceTextArea = document.createElement("textarea");
+                pasteSourceTextArea.id = "paste-source-textarea";
+                pasteSourceTextArea.cols = 80;
+                pasteSourceTextArea.rows = 10;
+                pasteSourceTextArea.onchange = function() {
+                    var textToPaste = pasteSourceTextArea.value;
+                    if (textToPaste.length != 0) {
+                        // Note: According to emscripten/src/preamble.js, the intArrayFromString
+                        //	function already handles UTF8 for us:
+                        _EMSCRIPTENQT_setClipboardText(allocate(intArrayFromString(textToPaste), 'i8', ALLOC_STACK));
+                    } else {
+                        _EMSCRIPTENQT_setClipboardText(0);	// NULL means no text or empty string
+                    }
+                };
+                var divForPasteSourceTextArea = document.createElement("div");
+                divForPasteSourceTextArea.style = "text-align:center; justify-content:center; align-items: center";
+                var pasteSourceTextAreaLabel = document.createElement("label");
+                pasteSourceTextAreaLabel.style.textAlign = "center";
+                pasteSourceTextAreaLabel.innerHTML = "Enter or Paste Text to Copy to the Application Clipboard Here:";
+                var clearSourceTextAreaButton = document.createElement("button");
+                clearSourceTextAreaButton.id = "clear-source-textarea-button";
+                clearSourceTextAreaButton.type = "button";
+                clearSourceTextAreaButton.innerHTML = "Clear";
+                clearSourceTextAreaButton.style.textAlign = "center";
+                clearSourceTextAreaButton.onclick = function() {
+                    pasteSourceTextArea.value = "";
+                    _EMSCRIPTENQT_setClipboardText(0);
+                };
+                divForPasteSourceTextArea.appendChild(pasteSourceTextAreaLabel);
+                divForPasteSourceTextArea.appendChild(document.createElement("br"));
+                divForPasteSourceTextArea.appendChild(pasteSourceTextArea);
+                divForPasteSourceTextArea.appendChild(document.createElement("br"));
+                divForPasteSourceTextArea.appendChild(clearSourceTextAreaButton);
+                canvas.parentNode.insertBefore(divForPasteSourceTextArea, canvas.nextSibling);
+
+                canvas.parentNode.insertBefore(document.createElement("br"), canvas.nextSibling);
+
+                var copyClipboardToSystemButton = document.createElement("button");
+                copyClipboardToSystemButton.id = "copy-clipboard-to-system";
+                copyClipboardToSystemButton.type = "button";
+                copyClipboardToSystemButton.innerHTML = "Click Here to Copy Application Clipboard to the System Clipboard";
+                copyClipboardToSystemButton.style.textAlign = "center";
+                var centerForCopyClipboardToSystemButton = document.createElement("center");
+                centerForCopyClipboardToSystemButton.appendChild(copyClipboardToSystemButton);
+                canvas.parentNode.insertBefore(centerForCopyClipboardToSystemButton, canvas.nextSibling);
+
+                $('button#copy-clipboard-to-system').zclip({
+                    path:'ZeroClipboard.swf',
+                    copy:function(){ return clipboardText; }
+                });
 
 		canvas.tabIndex = 1;
         } catch (e)
@@ -1340,7 +1393,9 @@ function _EMSCRIPTENQT_notify_frame_rendered_internal()
 
 function _EMSCRIPTENQT_clipboardTextChanged_internal(pcstrText)
 {
-    // TODO: Handle clipboard change notifications here, such as setting the
-    //  system's clipboard to match the Emscripten-Qt clipboard
+    // Note: According to emscripten/src/preamble.js, the Pointer_stringify
+    //	function already handles UTF8 for us:
+    clipboardText = Pointer_stringify(pcstrText);
+    $('textarea#paste-source-textarea').val(clipboardText);
 }
 

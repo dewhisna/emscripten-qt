@@ -271,3 +271,10 @@ mergeInto(LibraryManager.library, {
          return _EMSCRIPTENQT_attemptedLocalEventLoop_internal();
       }
     });
+
+mergeInto(LibraryManager.library, {
+     EMSCRIPTENQT_clipboardTextChanged: function(pcstrText) {
+         return _EMSCRIPTENQT_clipboardTextChanged_internal(pcstrText);
+      }
+    });
+
